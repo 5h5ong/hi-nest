@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
 
@@ -18,5 +19,33 @@ describe('MoviesService', () => {
 
   it('should be 4', () => {
     expect(2 + 2).toEqual(4);
+  });
+
+  describe('getAll()', () => {
+    it('should return an array', () => {
+      const result = service.getAll();
+      expect(result).toBeInstanceOf(Array);
+    });
+  });
+
+  describe('getOne()', () => {
+    it('should return a movie', () => {
+      // 처음 실행 시 movie에 아무 것도 없기 때문에 테스트를 위해 새로 만들어 줌
+      service.create({
+        title: 'Test Movie',
+        genres: ['test'],
+        year: 2000,
+      });
+      const movie = service.getOne(1);
+      expect(movie).toBeDefined();
+    });
+
+    it('should throw 404 error', () => {
+      try {
+        service.getOne(999);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
   });
 });
