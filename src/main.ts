@@ -3,6 +3,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  const PORT = process.env.PORT || 8080;
+  console.log(`Port is ${PORT}`);
+
   const app = await NestFactory.create(AppModule);
   // Request 유효성 검사 파이프
   app.useGlobalPipes(
@@ -15,6 +18,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(3000);
+  await app.listen(PORT);
 }
 bootstrap();
